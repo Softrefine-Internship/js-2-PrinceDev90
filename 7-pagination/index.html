@@ -3,13 +3,78 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Pagination</title>
     <style>
-      /* write CSS here */
+      .pagination {
+        display: flex;
+        gap: 4px;
+        padding: 10px;
+        justify-content: center;
+        align-items: center;
+        border-radius: 6px;
+        font-family: Arial, sans-serif;
+      }
+
+      .pagination button {
+        border: 1px solid #ccc;
+        background-color: white;
+        color: #333;
+        padding: 6px 12px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.2s ease;
+      }
+
+      .pagination button:hover {
+        background-color: #f1f1f1;
+      }
+
+      .pagination .active {
+        background-color: #e0f0ff;
+        color: blue;
+        font-weight: bold;
+      }
     </style>
   </head>
-  <body></body>
+  <body>
+    <div class="pagination">
+      <button class="prev">Previous</button>
+      <button class="page-number active">1</button>
+      <button class="page-number">2</button>
+      <button class="page-number">3</button>
+      <button class="page-number">4</button>
+      <button class="page-number">5</button>
+      <button class="next">Next</button>
+    </div>
+  </body>
   <script>
-    // write javascript here
+    const pageButtons = document.querySelectorAll(".page-number");
+    const prevButton = document.querySelector(".prev");
+    const nextButton = document.querySelector(".next");
+
+    let currentPage = 1;
+
+    function setActivePage(page) {
+      currentPage = page;
+
+      pageButtons.forEach((btn, index) => {
+        btn.classList.remove("active");
+        if (index + 1 === currentPage) {
+          btn.classList.add("active");
+        }
+      });
+    }
+
+    pageButtons.forEach((btn, index) => {
+      btn.addEventListener("click", () => setActivePage(index + 1));
+    });
+
+    prevButton.addEventListener("click", () => {
+      if (currentPage > 1) setActivePage(currentPage - 1);
+    });
+
+    nextButton.addEventListener("click", () => {
+      if (currentPage < pageButtons.length) setActivePage(currentPage + 1);
+    });
   </script>
 </html>

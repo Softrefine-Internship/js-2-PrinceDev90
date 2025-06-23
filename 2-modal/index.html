@@ -3,13 +3,384 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Dialog Modal</title>
+
+    <!-- google font -->
+    <link rel="preconnect" href="https://rsms.me/" />
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
     <style>
-      /* write CSS here */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+        font-variation-settings: normal;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        width: 100%;
+
+        background-color: #f9fafb;
+        padding: 20px;
+      }
+
+      /* Button to open dialog */
+      .open-dialog-btn {
+        border-radius: 5px;
+        background-color: rgba(3, 7, 18, 0.05);
+        padding: 10px 20px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #111827;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .open-dialog-btn:hover {
+        background-color: rgba(3, 7, 18, 0.1);
+      }
+
+      /* Dialog overlay */
+      .dialog-overlay {
+        position: relative;
+        z-index: 10;
+        display: none; /* Hidden by default */
+      }
+
+      .dialog-overlay.active {
+        display: block;
+      }
+
+      /* Background backdrop */
+      .backdrop {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        backdrop-filter: blur(10px);
+        background-color: rgba(107, 114, 128, 0.3);
+        transition: opacity 0.3s ease-out;
+        opacity: 0;
+      }
+
+      .dialog-overlay.active .backdrop {
+        opacity: 1;
+      }
+
+      /* Dialog container */
+      .dialog-container {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 10;
+        width: 100vw;
+        overflow-y: auto;
+      }
+
+      .dialog-wrapper {
+        display: flex;
+        min-height: 100vh;
+        align-items: flex-end;
+        justify-content: center;
+        padding: 16px;
+        text-align: center;
+      }
+
+      @media (min-width: 640px) {
+        .dialog-wrapper {
+          align-items: center;
+          padding: 0;
+        }
+      }
+
+      /* Dialog panel */
+      .dialog-panel {
+        position: relative;
+        transform: translateY(16px);
+        overflow: hidden;
+        border-radius: 8px;
+        background-color: white;
+        text-align: left;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        transition: all 0.3s ease-out;
+        opacity: 0;
+        width: 100%;
+        max-width: 32rem;
+        margin: 32px 0;
+      }
+
+      @media (min-width: 640px) {
+        .dialog-panel {
+          transform: scale(0.95);
+          width: 100%;
+          max-width: 32rem;
+        }
+      }
+
+      .dialog-overlay.active .dialog-panel {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (min-width: 640px) {
+        .dialog-overlay.active .dialog-panel {
+          transform: scale(1);
+        }
+      }
+
+      /* Dialog content */
+      .dialog-content {
+        background-color: white;
+        padding: 20px 16px 16px;
+      }
+
+      @media (min-width: 640px) {
+        .dialog-content {
+          padding: 24px 24px 16px;
+        }
+      }
+
+      .dialog-body {
+        display: flex;
+
+        flex-direction: column;
+        align-items: flex-start;
+        /* justify-content: center; */
+      }
+
+      @media (min-width: 640px) {
+        .dialog-body {
+          flex-direction: row;
+          align-items: flex-start;
+        }
+      }
+
+      /* Icon container */
+      .icon-container {
+        margin: 0 auto;
+        display: flex;
+        width: 48px;
+        height: 48px;
+        flex-shrink: 0;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background-color: #fef2f2;
+      }
+
+      @media (min-width: 640px) {
+        .icon-container {
+          margin: 0;
+          width: 40px;
+          height: 40px;
+        }
+      }
+
+      .warning-icon {
+        width: 24px;
+        height: 24px;
+        color: #dc2626;
+      }
+
+      /* Text content */
+      .text-content {
+        margin-top: 12px;
+        text-align: center;
+      }
+
+      @media (min-width: 640px) {
+        .text-content {
+          margin-top: 0;
+          margin-left: 16px;
+          text-align: left;
+        }
+      }
+
+      .dialog-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #111827;
+        margin-bottom: 8px;
+      }
+
+      .dialog-description {
+        font-size: 14px;
+        color: #6b7280;
+        line-height: 1.5;
+      }
+
+      /* Dialog actions */
+      .dialog-actions {
+        padding: 12px 16px;
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 12px;
+      }
+
+      @media (min-width: 640px) {
+        .dialog-actions {
+          flex-direction: row-reverse;
+          padding: 12px 24px;
+          gap: 0;
+        }
+      }
+
+      /* Buttons */
+      .btn {
+        display: inline-flex;
+        width: 100%;
+        justify-content: center;
+        border-radius: 6px;
+        padding: 8px 12px;
+        font-size: 14px;
+        font-weight: 600;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s;
+      }
+
+      @media (min-width: 640px) {
+        .btn {
+          width: auto;
+        }
+      }
+
+      .btn-danger {
+        background-color: #dc2626;
+        color: white;
+      }
+
+      .btn-danger:hover {
+        background-color: #b91c1c;
+      }
+
+      @media (min-width: 640px) {
+        .btn-danger {
+          margin-left: 12px;
+        }
+      }
+
+      .btn-secondary {
+        background-color: white;
+        color: #111827;
+        border: 1px solid #d1d5db;
+      }
+
+      .btn-secondary:hover {
+        background-color: #f9fafb;
+      }
+
+      @media (max-width: 639px) {
+        .btn-secondary {
+          margin-top: 0;
+        }
+      }
     </style>
   </head>
-  <body></body>
-  <script>
-    // write javascript here
-  </script>
+  <body>
+    <div>
+      <button class="open-dialog-btn" onclick="openDialog()">
+        Open dialog
+      </button>
+
+      <div
+        class="dialog-overlay"
+        id="dialogOverlay"
+        role="dialog"
+        aria-modal="true" 
+      >
+        <div class="backdrop" onclick="closeDialog()"></div>
+        <div class="dialog-container">
+          <div class="dialog-wrapper">
+            <div class="dialog-panel">
+              <div class="dialog-content">
+                <div class="dialog-body">
+                  <div class="icon-container">
+                    <svg
+                      class="warning-icon"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"
+                      />
+                    </svg>
+                  </div>
+                  <div class="text-content">
+                    <h3 class="dialog-title" id="dialog-title">
+                      Deactivate account
+                    </h3>
+                    <div>
+                      <p class="dialog-description">
+                        Are you sure you want to deactivate your account? All of
+                        your data will be permanently removed. This action
+                        cannot be undone.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="dialog-actions">
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  onclick="deactivateAccount()"
+                >
+                  Deactivate
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  onclick="closeDialog()"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function openDialog() {
+        const overlay = document.getElementById("dialogOverlay");
+        overlay.classList.add("active");
+        document.body.style.overflow = "hidden"; // Prevent background scrolling
+      }
+
+      function closeDialog() {
+        const overlay = document.getElementById("dialogOverlay");
+        overlay.classList.remove("active");
+        document.body.style.overflow = ""; // Restore scrolling
+      }
+
+      function deactivateAccount() {
+        alert("Account deactivation functionality would be implemented here");
+        closeDialog();
+      }
+
+      // Close dialog on Escape key
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          closeDialog();
+        }
+      });
+    </script>
+  </body>
 </html>

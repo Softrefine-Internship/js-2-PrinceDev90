@@ -3,13 +3,185 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Accordion</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://rsms.me/" />
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+
+    <!-- Phosphor Icons -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css"
+    />
+
     <style>
-      /* write CSS here */
+      * {
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+        font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+        font-variation-settings: normal;
+      }
+
+      body {
+        padding: 40px;
+      }
+
+      .accordion {
+        max-width: 600px;
+        margin: auto;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        background: white;
+        overflow: hidden;
+      }
+
+      .accordion-item {
+        border-top: 1px solid #e2e8f0;
+      }
+
+      .accordion-item:first-child {
+        border-top: none;
+      }
+
+      .accordion-item.active .accordion-label {
+        background-color: #f1f5f9;
+      }
+
+      .accordion-label {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        font-weight: 500;
+        cursor: pointer;
+        border-bottom: 1px solid #e2e8f0;
+        transition: background-color 0.2s ease;
+      }
+
+      .accordion-icons {
+        display: flex;
+        align-items: center;
+      }
+
+      .accordion-icons i {
+        font-size: 18px;
+        margin-left: 8px;
+        transition: transform 0.3s ease;
+      }
+
+      .accordion-item.active .accordion-icons i {
+        transform: rotate(180deg);
+      }
+
+      .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        background-color: #fff;
+        padding: 0 20px;
+      }
+
+      .accordion-item.active .accordion-content {
+        max-height: 500px;
+        padding: 16px 20px;
+      }
+
+      .accordion-content p {
+        margin: 0;
+        color: #374151;
+        line-height: 1.6;
+      }
+
+      .accordion-content strong {
+        font-weight: 600;
+      }
+
+      .accordion-content .highlight {
+        color: red;
+      }
     </style>
   </head>
-  <body></body>
-  <script>
-    // write javascript here
-  </script>
+  <body>
+    <div class="accordion">
+      <!-- Accordion Item 1 -->
+      <div class="accordion-item">
+        <div class="accordion-label">
+          Accordion Item #1
+          <span class="accordion-icons">
+            <i class="ph ph-caret-down"></i>
+          </span>
+        </div>
+        <div class="accordion-content">
+          <p>
+            <strong>This is the first item's accordion body.</strong>
+            It is shown by default, until the collapse plugin adds the
+            appropriate classes that we use to style each element. These classes
+            control the overall appearance, as well as the showing and hiding
+            via CSS transitions. You can modify any of this with custom CSS or
+            overriding our default variables. It's also worth noting that just
+            about any HTML can go within the
+            <span class="highlight">.accordion-body</span>, though the
+            transition does limit overflow.
+          </p>
+        </div>
+      </div>
+
+      <!-- Accordion Item 2 -->
+      <div class="accordion-item">
+        <div class="accordion-label">
+          Accordion Item #2
+          <span class="accordion-icons">
+            <i class="ph ph-caret-down"></i>
+          </span>
+        </div>
+        <div class="accordion-content">
+          <p>This is the second item's accordion body.</p>
+        </div>
+      </div>
+
+      <!-- Accordion Item 3 -->
+      <div class="accordion-item">
+        <div class="accordion-label">
+          Accordion Item #3
+          <span class="accordion-icons">
+            <i class="ph ph-caret-down"></i>
+          </span>
+        </div>
+        <div class="accordion-content">
+          <p>This is the third item's accordion body.</p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const accordionItems = document.querySelectorAll(".accordion-item");
+
+      accordionItems.forEach((item, index) => {
+        const label = item.querySelector(".accordion-label");
+        const icon = item.querySelector(".accordion-icons i");
+
+        // Initialize first item as active
+        if (index === 0) {
+          item.classList.add("active");
+        }
+
+        label.addEventListener("click", () => {
+          const isActive = item.classList.contains("active");
+          console.log(isActive);
+          
+          // Close all
+          accordionItems.forEach((otherItem) => {
+            otherItem.classList.remove("active");
+          });
+
+          // Toggle clicked
+          if (!isActive) {
+            item.classList.add("active");
+          }
+        });
+      });
+    </script>
+  </body>
 </html>

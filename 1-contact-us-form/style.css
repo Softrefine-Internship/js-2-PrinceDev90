@@ -6,3 +6,270 @@
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   font-variation-settings: normal;
 }
+
+.text-gray-600 {
+  color: #4a5565;
+}
+
+:root {
+  --primary-color: #4f39f6;
+  --secondary-color: #4a5565;
+  --dark-color: #101828;
+}
+
+/* utilites */
+
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.contact-form {
+  height: 100%;
+  padding: 20px 0px;
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.blue {
+  position: fixed;
+  top: 0px;
+  left: 10%;
+  z-index: -1;
+  height: 200px;
+  width: 200px;
+  background-color: var(--primary-color);
+  filter: blur(150px);
+  border-radius: 50%;
+}
+
+.red {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: -1;
+  height: 200px;
+  width: 200px;
+  background-color: pink;
+  filter: blur(150px);
+  border-radius: 50%;
+}
+
+.contact-heading {
+  margin-bottom: 20px;
+  color: var(--dark-color);
+}
+
+.contact-heading h1 {
+  text-align: center;
+  letter-spacing: -1px;
+  font-size: 2rem;
+}
+
+.contact-heading p {
+  text-align: center;
+  font-size: 1rem;
+  margin-top: 10px;
+  margin-bottom: 55px;
+}
+
+.actual-form {
+  display: grid;
+  max-width: 40%;
+  width: 100%;
+  margin: 0px auto;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 25px;
+}
+
+.fname {
+  grid-column: 1 / 7;
+  display: flex;
+  flex-direction: column;
+}
+
+input,
+textarea {
+  padding: 10px;
+  border: 1px solid #6a728242;
+  outline: none;
+  border-radius: 4px;
+  background-color: white;
+  margin-top: 12px;
+  /* box-shadow: 1px 1px 2px silver; */
+}
+
+.lname {
+  grid-column: 7 / -1;
+  display: flex;
+  flex-direction: column;
+}
+
+.company {
+  grid-column: 1 / -1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.email {
+  grid-column: 1 / -1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.phoneNumber {
+  grid-column: 1 / -1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.phoneNumber #phoneNumber {
+  padding-left: 100px;
+}
+
+.message {
+  grid-column: 1 / -1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.accept-agrement {
+  grid-column: 1 / -1;
+  width: 100%;
+  align-items: center;
+  gap: 10px;
+  /* flex-direction: column; */
+}
+
+.accept-agrement p {
+  color: var(--secondary-color);
+  font-size: 14px;
+}
+
+.accept-agrement .pricy {
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+.toggle-wrapper {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.toggle-input {
+  display: none;
+}
+
+.toggle {
+  background-color: #6a728258;
+  width: 40px;
+  height: 25px;
+  position: relative;
+  border-radius: 50rem;
+  padding: 3px;
+  transition: background-color 0.3s ease;
+}
+
+.toggle span {
+  position: absolute;
+  background-color: white;
+  width: 20px;
+  height: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+/* Toggle ON */
+.toggle-input:checked+.toggle {
+  background-color: #4ade80;
+}
+
+.toggle-input:checked+.toggle span {
+  transform: translate(15px, -50%);
+  /* moves the circle to the right */
+}
+
+
+
+.btn {
+  grid-column: 1 / -1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 10px;
+  background-color: var(--primary-color);
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  color: white;
+  border-radius: 7px;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.phoneContainer {
+  position: relative;
+}
+
+.input-element {
+  position: absolute;
+  top: 40px;
+  outline: none;
+  left: 10px;
+  border: none;
+  background-color: transparent;
+}
+
+
+small {
+  font-size: 12px;
+  color: red;
+  display: block;
+  margin-top: 2px;
+}
+
+
+.input-flag-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-flag-wrapper input {
+  width: 100%;
+  padding-right: 50px;
+  /* space for flag */
+  height: 40px;
+  box-sizing: border-box;
+}
+
+.input-flag-wrapper img {
+  position: absolute;
+  top: 23px;
+  right: 15px;
+  object-fit: cover;
+  border: 1px solid #6a728242;
+  border-radius: 2px;
+  width: 28px;
+  height: 20px;
+  pointer-events: none;
+}

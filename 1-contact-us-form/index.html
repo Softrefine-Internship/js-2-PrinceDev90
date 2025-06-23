@@ -3,13 +3,93 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <style>
-      /* write CSS here */
-    </style>
+    <title>Contact form</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- google font -->
+    <link rel="preconnect" href="https://rsms.me/" />
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
   </head>
-  <body></body>
-  <script>
-    // write javascript here 
-  </script>
+  <body>
+    <section class="contact-form container">
+      <div class="blue"></div>
+      <div class="red"></div>
+      <div class="contact-heading">
+        <h1>Contact sales</h1>
+        <p class="text-gray-600">
+          Aute magna irure deserunt veniam aliqua magna enim voluptate.
+        </p>
+      </div>
+      <form id="formData">
+        <div class="actual-form">
+          <div class="fname">
+            <label for="fname">First name</label>
+            <input type="text" id="fname" />
+            <small></small>
+          </div>
+          <div class="lname">
+            <label for="lname">Last name</label>
+            <input type="text" id="lname" />
+            <small></small>
+          </div>
+          <div class="company">
+            <label for="company">Company</label>
+            <input type="text" id="company" />
+            <small></small>
+          </div>
+          <div class="email">
+            <label for="email">Email</label>
+            <input type="text" id="email" />
+            <small></small>
+          </div>
+          <div class="phoneNumber phoneContainer">
+            <label for="phoneNumber">Phone number</label>
+
+            <!-- Wrapper for input and flag -->
+            <div class="input-flag-wrapper">
+              <input
+                type="text"
+                id="phoneNumber"
+                maxlength="12"
+                pattern="\d*"
+                inputmode="numeric"
+              />
+              <img
+                id="flagImage"
+                src="https://flagcdn.com/w40/in.png"
+                alt="Flag"
+              />
+            </div>
+
+            <select name="" class="input-element" id="phone_code"></select>
+            <small></small>
+          </div>
+
+          <div class="message">
+            <label for="message">Message</label>
+            <!-- <textarea name="" id=""></textarea> -->
+            <textarea name="" id="message" cols="30" rows="5"></textarea>
+            <small></small>
+            <!-- <input type="text" id="message" /> -->
+          </div>
+          <div class="accept-agrement flex">
+            <label class="toggle-wrapper">
+              <input type="checkbox" class="toggle-input" id="isChecked" />
+              <div class="toggle">
+                <span></span>
+              </div>
+            </label>
+
+            <p>
+              By selecting this, you agree to our
+              <span class="pricy">privacy policy.</span>
+            </p>
+          </div>
+          <button type="submit" class="btn">Let's talk</button>
+        </div>
+      </form>
+    </section>
+
+    <script src="app.js"></script>
+  </body>
 </html>

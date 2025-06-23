@@ -3,13 +3,230 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Navigation</title>
+
+    <!-- google font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- phosphor icon-->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css"
+    />
+
     <style>
-      /* write CSS here */
+      * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+        font-family: "Rubik", sans-serif;
+        list-style: none;
+        text-decoration: none;
+      }
+      :root {
+        --color-primary: rgb(230, 126, 34);
+        --color-dark: #333;
+        --light-primary-color: #fdf2e9;
+      }
+
+      header {
+        background-color: var(--light-primary-color);
+        padding: 25px;
+        overflow: hidden;
+      }
+      .container {
+        max-width: 1380px;
+        margin: 0px auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .logo {
+        width: 170px;
+        height: auto;
+        object-fit: cover;
+        cursor: pointer;
+      }
+      .menu-items {
+        display: flex;
+        align-items: center;
+        gap: 40px;
+      }
+
+      .menu-items li a {
+        color: var(--color-dark);
+        font-weight: 500;
+      }
+
+      .menu-items li button {
+        background-color: var(--color-primary);
+        border: none;
+        font-weight: 500;
+        color: white;
+        border-radius: 8px;
+        font-size: 16px;
+        padding: 10px 20px;
+      }
+
+      .bar_menu {
+        display: none;
+      }
+
+      .menu-offset {
+        display: none;
+      }
+
+      @media (max-width: 868px) {
+        .bar_menu {
+          display: block;
+        }
+
+        .bar_menu li button {
+          background-color: transparent;
+          border: none;
+          height: 40px;
+          width: 40px;
+          cursor: pointer;
+        }
+        .bar_menu li button:active {
+          box-shadow: 0px 0px 0px 5px rgb(230, 126, 34, 0.5);
+        }
+
+        .bar_menu li button i {
+          font-size: 20px;
+        }
+
+        .logo {
+          width: 120px;
+        }
+        .menu-items {
+          display: none;
+        }
+
+        .menu-offset {
+          position: absolute;
+          z-index: 10;
+          inset: 0;
+          background-color: rgba(255, 255, 255);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+
+          /* Animation-related */
+          opacity: 0;
+          visibility: hidden;
+          transform: translateX(-100%);
+          transition: all 0.3s ease-in-out;
+        }
+
+        .menu-offset.show {
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(0);
+        }
+
+        .close-menu-offset {
+          position: absolute;
+          top: 25px;
+          right: 25px;
+          background-color: transparent;
+          border: none;
+          height: 40px;
+
+          width: 40px;
+          /* padding: 10px; */
+        }
+
+        .close-menu-offset:active {
+          box-shadow: 0px 0px 0px 5px rgb(230, 126, 34, 0.5);
+        }
+
+        .mobile-menu-items {
+          display: flex;
+          flex-direction: column;
+          gap: 50px;
+          font-size: 40px;
+        }
+
+        .mobile-menu-items li a {
+          color: var(--color-dark);
+          font-weight: 500;
+        }
+
+        .mobile-menu-button {
+          background-color: var(--color-primary);
+          border: none;
+          font-weight: 500;
+          font-size: 40px;
+          color: white;
+          border-radius: 8px;
+          padding: 14px 24px;
+        }
+
+        .close-menu-offset i {
+          font-size: 22px;
+          font-weight: bolder;
+        }
+      }
     </style>
   </head>
-  <body></body>
+  <body>
+    <header>
+      <div class="container">
+        <img src="images/omnifood-logo.png" alt="omnifood-logo" class="logo" />
+        <nav>
+          <ul class="menu-items">
+            <li><a href="">How it works</a></li>
+            <li><a href="">Meals</a></li>
+            <li><a href="">Testimonials</a></li>
+            <li><a href="">Pricing</a></li>
+            <li><button>Try for free</button></li>
+          </ul>
+
+          <!-- mobile menu start -->
+          <ul class="bar_menu">
+            <li>
+              <button class="open_menu_bar"><i class="ph ph-list"></i></button>
+            </li>
+          </ul>
+          <div class="menu-offset">
+            <button class="close-menu-offset"><i class="ph ph-x"></i></button>
+            <nav>
+              <ul class="mobile-menu-items">
+                <li><a href="">How it works</a></li>
+                <li><a href="">Meals</a></li>
+                <li><a href="">Testimonials</a></li>
+                <li><a href="">Pricing</a></li>
+                <li>
+                  <button class="mobile-menu-button">Try for free</button>
+                </li>
+              </ul>
+            </nav>
+          </div>
+          <!-- mobile menu end -->
+        </nav>
+      </div>
+    </header>
+  </body>
   <script>
-    // write javascript here
+    const open_menu_bar = document.querySelector(".open_menu_bar");
+    const menuOffset = document.querySelector(".menu-offset");
+    const closeMenu = document.querySelector(".close-menu-offset");
+
+    open_menu_bar.addEventListener("click", () => {
+      menuOffset.classList.add("show");
+    });
+
+    closeMenu.addEventListener("click", () => {
+      menuOffset.classList.remove("show");
+    });
   </script>
 </html>

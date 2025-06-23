@@ -3,13 +3,117 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Simple Tabs</title>
+    <!-- google font -->
+    <link rel="preconnect" href="https://rsms.me/" />
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
     <style>
-      /* write CSS here */
+      * {
+        font-family: "Inter", sans-serif;
+        font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+        font-variation-settings: normal;
+      }
+
+      body {
+        font-family: sans-serif;
+        padding: 40px;
+        background-color: #f9fafb;
+      }
+
+      .tabs {
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        gap: 25px;
+      }
+
+      .tab {
+        padding: 15px 20px;
+        cursor: pointer;
+        position: relative;
+        color: #4b5563;
+        transition: color 0.2s ease;
+      }
+
+      .tab.active {
+        color: #2563eb;
+        font-weight: 500;
+      }
+
+      .tab.active::after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background-color: #2563eb;
+      }
+
+      .tab-content {
+        margin-top: 20px;
+        background-color: #f8fafc;
+        border-radius: 8px;
+        color: #374151;
+      }
+
+      .tab-content p {
+        margin: 0;
+      }
+
+      .hidden {
+        display: none;
+      }
     </style>
   </head>
-  <body></body>
-  <script>
-    // write javascript here
-  </script>
+  <body>
+    <div class="tabs">
+      <div class="tab active" data-tab="profile">Profile</div>
+      <div class="tab" data-tab="dashboard">Dashboard</div>
+      <div class="tab" data-tab="settings">Settings</div>
+      <div class="tab" data-tab="contacts">Contacts</div>
+    </div>
+
+    <div class="tab-content" id="profile">
+      <p>
+        This is some placeholder content for the
+        <strong>Profile tab's associated content</strong>. Clicking another tab
+        will toggle the visibility of this one for the next.
+      </p>
+    </div>
+
+    <div class="tab-content hidden" id="dashboard">
+      <p>This is content for the <strong>Dashboard tab</strong>.</p>
+    </div>
+
+    <div class="tab-content hidden" id="settings">
+      <p>This is content for the <strong>Settings tab</strong>.</p>
+    </div>
+
+    <div class="tab-content hidden" id="contacts">
+      <p>This is content for the <strong>Contacts tab</strong>.</p>
+    </div>
+
+    <script>
+      const tabs = document.querySelectorAll(".tab"); //select all tab
+      const contents = document.querySelectorAll(".tab-content"); //select all tab_content
+
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          const target = tab.getAttribute("data-tab");
+            
+          console.log(target);
+
+          // Update active tab
+          tabs.forEach((t) => t.classList.remove("active"));
+          tab.classList.add("active");
+
+          // Show content
+          contents.forEach((content) => {
+            content.classList.add("hidden");
+            if (content.id === target) content.classList.remove("hidden");
+          });
+        });
+      });
+    </script>
+  </body>
 </html>
