@@ -48,13 +48,18 @@
 
       /* Dialog overlay */
       .dialog-overlay {
-        position: relative;
+        position: fixed;
+        inset: 0;
         z-index: 10;
-        display: none; /* Hidden by default */
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s linear 0.3s, opacity .3s ease;
       }
 
       .dialog-overlay.active {
-        display: block;
+        visibility: visible;
+        opacity: 1;
+        transition-delay: 0s;
       }
 
       /* Background backdrop */
@@ -89,7 +94,7 @@
       .dialog-wrapper {
         display: flex;
         min-height: 100vh;
-        align-items: flex-end;
+        align-items: center;
         justify-content: center;
         padding: 16px;
         text-align: center;
@@ -298,7 +303,7 @@
         class="dialog-overlay"
         id="dialogOverlay"
         role="dialog"
-        aria-modal="true" 
+        aria-modal="true"
       >
         <div class="backdrop" onclick="closeDialog()"></div>
         <div class="dialog-container">
@@ -358,24 +363,23 @@
     </div>
 
     <script>
+      const overlay = document.getElementById("dialogOverlay");
+
       function openDialog() {
-        const overlay = document.getElementById("dialogOverlay");
         overlay.classList.add("active");
-        document.body.style.overflow = "hidden"; // Prevent background scrolling
+        document.body.style.overflow = "hidden";
       }
 
       function closeDialog() {
-        const overlay = document.getElementById("dialogOverlay");
         overlay.classList.remove("active");
-        document.body.style.overflow = ""; // Restore scrolling
+        document.body.style.overflow = "";
       }
 
       function deactivateAccount() {
-        alert("Account deactivation functionality would be implemented here");
+        alert("Account deactivation.");
         closeDialog();
       }
 
-      // Close dialog on Escape key
       document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") {
           closeDialog();

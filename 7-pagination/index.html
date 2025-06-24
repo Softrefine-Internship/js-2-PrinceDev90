@@ -3,78 +3,154 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pagination</title>
+    <title>Pagination Example</title>
     <style>
+      body {
+        font-family: sans-serif;
+        background: #f9f9f9;
+        padding: 40px;
+      }
+
+      .content {
+        max-width: 600px;
+        margin: 0 auto 30px;
+      }
+
+      .item {
+        background: #fff;
+        padding: 16px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        border-radius: 8px;
+      }
+
       .pagination {
         display: flex;
-        gap: 4px;
-        padding: 10px;
         justify-content: center;
-        align-items: center;
-        border-radius: 6px;
-        font-family: Arial, sans-serif;
+        flex-wrap: wrap;
+        gap: 8px;
       }
 
       .pagination button {
-        border: 1px solid #ccc;
-        background-color: white;
+        padding: 8px 12px;
+        border: none;
+        background-color: #eee;
         color: #333;
-        padding: 6px 12px;
         cursor: pointer;
-        border-radius: 4px;
-        transition: background-color 0.2s ease;
+        border-radius: 6px;
+        min-width: 40px;
       }
 
-      .pagination button:hover {
-        background-color: #f1f1f1;
-      }
-
-      .pagination .active {
-        background-color: #e0f0ff;
-        color: blue;
+      .pagination button.active {
+        background-color: #333;
+        color: #fff;
         font-weight: bold;
+      }
+
+      .pagination button:hover:not(.active) {
+        background-color: #ddd;
+      }
+
+      .pagination button:disabled {
+        opacity: 0.5;
+        cursor: default;
       }
     </style>
   </head>
   <body>
-    <div class="pagination">
-      <button class="prev">Previous</button>
-      <button class="page-number active">1</button>
-      <button class="page-number">2</button>
-      <button class="page-number">3</button>
-      <button class="page-number">4</button>
-      <button class="page-number">5</button>
-      <button class="next">Next</button>
-    </div>
-  </body>
-  <script>
-    const pageButtons = document.querySelectorAll(".page-number");
-    const prevButton = document.querySelector(".prev");
-    const nextButton = document.querySelector(".next");
+    <div class="content" id="data-container"></div>
 
-    let currentPage = 1;
+    <div class="pagination" id="pagination"></div>
 
-    function setActivePage(page) {
-      currentPage = page;
+    <script>
+      const totalItems = 200;
+      const itemsPerPage = 10;
+      const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-      pageButtons.forEach((btn, index) => {
-        btn.classList.remove("active");
-        if (index + 1 === currentPage) {
-          btn.classList.add("active");
+      const container = document.getElementById("data-container");
+      const pagination = document.getElementById("pagination");
+
+      let currentPage = 1;
+
+      function renderData(page) {
+        container.innerHTML = "";
+        const start = (page - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+
+        for (let i = start + 1; i <= end && i <= totalItems; i++) {
+          const item = document.createElement("div");
+          item.className = "item";
+          item.textContent = `Item #${i}`;
+          container.appendChild(item);
         }
-      });
-    }
+      }
 
-    pageButtons.forEach((btn, index) => {
-      btn.addEventListener("click", () => setActivePage(index + 1));
-    });
+      function renderPagination() {
+        pagination.innerHTML = "";
 
-    prevButton.addEventListener("click", () => {
-      if (currentPage > 1) setActivePage(currentPage - 1);
-    });
+        const createPageButton = (pageNum, label = pageNum) => {
+          const btn = document.createElement("button");
+          btn.textContent = label;
+          if (pageNum === currentPage) {
+            btn.classList.add("active");
+          }
+          btn.addEventListener("click", () => {
+            currentPage = pageNum;
+            renderData(currentPage);
+            renderPagination();
+          });
+          return btn;
+        };
 
-    nextButton.addEventListener("click", () => {
-      if (currentPage < pageButtons.length) setActivePage(currentPage + 1);
-    });
-  </script>
+        // Previous Button
+        const prevBtn = createPageButton(currentPage - 1, "«");
+        prevBtn.disabled = currentPage === 1;
+        pagination.appendChild(prevBtn);
+
+        // Page buttons logic (like Google style)
+        let startPage = Math.max(1, currentPage - 2);
+        let endPage = Math.min(totalPages, currentPage + 2);
+
+        if (currentPage <= 3) {
+          endPage = Math.min(5, totalPages);
+        }
+        if (currentPage >= totalPages - 2) {
+          startPage = Math.max(totalPages - 4, 1);
+        }
+
+        if (startPage > 1) {
+          pagination.appendChild(createPageButton(1));
+          if (startPage > 2) {
+            const dots = document.createElement("button");
+            dots.textContent = "...";
+            dots.disabled = true;
+            pagination.appendChild(dots);
+          }
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+          pagination.appendChild(createPageButton(i));
+        }
+
+        if (endPage < totalPages) {
+          if (endPage < totalPages - 1) {
+            const dots = document.createElement("button");
+            dots.textContent = "...";
+            dots.disabled = true;
+            pagination.appendChild(dots);
+          }
+          pagination.appendChild(createPageButton(totalPages));
+        }
+
+        // Next Button
+        const nextBtn = createPageButton(currentPage + 1, "»");
+        nextBtn.disabled = currentPage === totalPages;
+        pagination.appendChild(nextBtn);
+      }
+
+      // Initialize
+      renderData(currentPage);
+      renderPagination();
+    </script>
+  </body>
 </html>

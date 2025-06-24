@@ -3,21 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Slider</title>
+    <title>Smooth Infinite Slider</title>
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css"
     />
     <style>
       * {
+        box-sizing: border-box;
         margin: 0;
         padding: 0;
-        box-sizing: border-box;
       }
 
       body {
+        background: #f0f0f0;
         font-family: sans-serif;
-        margin: 10px;
       }
 
       .container {
@@ -31,43 +31,46 @@
       }
 
       .slider-container {
+        overflow: hidden;
+        height: 100%;
+      }
+
+      .slider-wrapper {
         display: flex;
         height: 100%;
-        scroll-snap-type: x mandatory;
-        overflow-x: hidden;
-        scroll-behavior: smooth;
+        transition: transform 0.5s ease-in-out;
       }
 
       .slide {
         flex: 0 0 100%;
         height: 100%;
-        scroll-snap-align: start;
       }
 
       .slide img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        display: block;
       }
 
       .dot-indicator {
         position: absolute;
         bottom: 15px;
-        width: 100%;
+        left: 50%;
+        transform: translateX(-50%);
         display: flex;
-        justify-content: center;
-        gap: 15px;
-        z-index: 10;
+        gap: 12px;
+        padding: 8px 20px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 50rem;
+        backdrop-filter: blur(10px);
       }
 
       .dot {
         height: 12px;
         width: 12px;
+        background-color: #bbb;
         border-radius: 50%;
-        background-color: gray;
         cursor: pointer;
-        transition: background-color 0.3s;
       }
 
       .dot.active {
@@ -77,141 +80,141 @@
       .angle_indicator {
         position: absolute;
         top: 50%;
-        transform: translateY(-50%);
         width: 100%;
         display: flex;
         justify-content: space-between;
+        transform: translateY(-50%);
         padding: 0 20px;
-        z-index: 10;
       }
 
       .angle_indicator button {
-        height: 40px;
-        width: 40px;
-        border-radius: 50%;
-        background-color: rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.3);
         border: none;
-        color: white;
+        height: 50px;
+        width: 50px;
         display: flex;
         align-items: center;
         justify-content: center;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
         cursor: pointer;
-        transition: background-color 0.3s;
-      }
-
-      .angle_indicator button:hover {
-        background-color: rgba(0, 0, 0, 0.8);
-      }
-
-      .angle_indicator button i {
-        font-size: 20px;
+        font-size: 26px;
+        border-radius: 50%;
       }
     </style>
   </head>
   <body>
     <div class="container">
       <div class="slider-container">
-        <div class="slide">
-          <img
-            src="https://images.unsplash.com/photo-1608597003735-744d429b6524?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="Slider 1"
-          />
-        </div>
-        <div class="slide">
-          <img
-            src="https://images.unsplash.com/photo-1593791324908-b29db12e21c9?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="Slider 2"
-          />
-        </div>
-        <div class="slide">
-          <img
-            src="https://images.unsplash.com/photo-1559327663-8f401612d6e7?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="Slider 3"
-          />
+        <div class="slider-wrapper">
+          <!-- Cloned last slide -->
+          <div class="slide">
+            <img src="images/slider-3.jpg" alt="Slider 3" />
+          </div>
+
+          <!-- Actual slides -->
+          <div class="slide">
+            <img src="images/slider-1.jpg" alt="Slider 1" />
+          </div>
+          <div class="slide">
+            <img src="images/slider-2.jpg" alt="Slider 2" />
+          </div>
+          <div class="slide">
+            <img src="images/slider-3.jpg" alt="Slider 3" />
+          </div>
+
+          <!-- Cloned first slide -->
+          <div class="slide">
+            <img src="images/slider-1.jpg" alt="Slider 1" />
+          </div>
         </div>
       </div>
 
       <div class="dot-indicator">
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
+        <span class="dot active" data-slide="0"></span>
+        <span class="dot" data-slide="1"></span>
+        <span class="dot" data-slide="2"></span>
       </div>
 
       <div class="angle_indicator">
-        <button><i class="ph ph-caret-left"></i></button>
-        <button><i class="ph ph-caret-right"></i></button>
+        <button class="prev"><i class="ph ph-caret-left"></i></button>
+        <button class="next"><i class="ph ph-caret-right"></i></button>
       </div>
     </div>
 
     <script>
+      const wrapper = document.querySelector(".slider-wrapper");
       const slides = document.querySelectorAll(".slide");
-      const sliderContainer = document.querySelector(".slider-container");
       const dots = document.querySelectorAll(".dot");
-      const leftBtn = document.querySelector(".ph-caret-left").parentElement;
-      const rightBtn = document.querySelector(".ph-caret-right").parentElement;
+      const nextBtn = document.querySelector(".next");
+      const prevBtn = document.querySelector(".prev");
 
-      let currentIndex = 0;
+      let index = 1; // Start at the first real slide
+      const slideCount = 3; // actual slide count (excluding clones)
+      let interval = setInterval(nextSlide, 4000);
 
-      // Step 1: Clone first slide and add to end
-      const firstClone = slides[0].cloneNode(true);
-      sliderContainer.appendChild(firstClone);
-
-      const allSlides = document.querySelectorAll(".slide"); // update list to include clone
-
-      function showSlide(index) {
-        currentIndex = index;
-        sliderContainer.scrollTo({
-          left: allSlides[index].offsetLeft,
-          behavior: "smooth",
-        });
-
-        // Update dots (except for clone)
-        dots.forEach((dot, i) => {
-          dot.classList.toggle("active", i === index % dots.length);
-        });
+      function updateDots() {
+        dots.forEach((dot) => dot.classList.remove("active"));
+        dots[(index - 1 + slideCount) % slideCount].classList.add("active");
       }
 
-      rightBtn.addEventListener("click", () => {
-        showSlide(currentIndex + 1);
-      });
+      function showSlide(i) {
+        wrapper.style.transition = "transform 0.5s ease-in-out";
+        wrapper.style.transform = `translateX(-${i * 100}%)`;
+        index = i;
+        updateDots();
+      }
 
-      leftBtn.addEventListener("click", () => {
-        if (currentIndex === 0) {
-          currentIndex = allSlides.length - 2; // move to last real slide
-          sliderContainer.scrollTo({
-            left: allSlides[currentIndex].offsetLeft,
-            behavior: "auto",
-          });
-        } else {
-          showSlide(currentIndex - 1);
+      function nextSlide() {
+        if (index >= slides.length - 1) return;
+        showSlide(index + 1);
+      }
+
+      function prevSlide() {
+        if (index <= 0) return;
+        showSlide(index - 1);
+      }
+
+      wrapper.addEventListener("transitionend", () => {
+        if (index === slides.length - 1) {
+          // Moved to fake first (clone of first) -> snap to real first
+          wrapper.style.transition = "none";
+          index = 1;
+          wrapper.style.transform = `translateX(-${index * 100}%)`;
+        }
+        if (index === 0) {
+          // Moved to fake last (clone of last) -> snap to real last
+          wrapper.style.transition = "none";
+          index = slides.length - 2;
+          wrapper.style.transform = `translateX(-${index * 100}%)`;
         }
       });
 
-      // Step 2: Handle loop transition
-      sliderContainer.addEventListener("scroll", () => {
-        // if on clone (last slide), jump to real first without animation
-        if (currentIndex === allSlides.length - 1) {
-          setTimeout(() => {
-            sliderContainer.scrollTo({
-              left: 0,
-              behavior: "auto",
-            });
-            currentIndex = 0;
-          }, 300); // delay matches scroll duration
-        }
+      function resetInterval() {
+        clearInterval(interval);
+        interval = setInterval(nextSlide, 4000);
+      }
+
+      nextBtn.addEventListener("click", () => {
+        nextSlide();
+        resetInterval();
       });
 
-      // Step 3: Dot click
-      dots.forEach((dot, index) => {
-        dot.addEventListener("click", () => showSlide(index));
+      prevBtn.addEventListener("click", () => {
+        prevSlide();
+        resetInterval();
       });
 
-      // Step 4: Auto Slide
-      setInterval(() => {
-        showSlide(currentIndex + 1);
-      }, 4000);
+      dots.forEach((dot, i) => {
+        dot.addEventListener("click", () => {
+          showSlide(i + 1); // i+1 because of cloned first slide
+          resetInterval();
+        });
+      });
 
-      showSlide(0);
+      // Initial setup
+      showSlide(index);
     </script>
   </body>
 </html>

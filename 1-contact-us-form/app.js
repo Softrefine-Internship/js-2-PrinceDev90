@@ -68,6 +68,7 @@ formTrigger.formData.addEventListener("submit", function (e) {
   }
 });
 
+
 function validateForm(form) {
   const errors = {};
 
@@ -166,3 +167,5 @@ function clearError(input) {
     input.style.borderColor = "";
   }
 }
+
+

@@ -273,3 +273,7 @@ small {
   height: 20px;
   pointer-events: none;
 }
+
+#phone_code {
+  cursor: pointer;
+}
