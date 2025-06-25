@@ -12,7 +12,16 @@ const formTrigger = {
 
 document.addEventListener("DOMContentLoaded", function () {
   setPhoneCodeOption();
+  loadDataFromLocalStorage();
 });
+
+function loadDataFromLocalStorage() {
+  const existingData =
+    JSON.parse(localStorage.getItem("contactSubmissions")) || [];
+  existingData.forEach((entry) => {
+    appendDataToTable(entry);
+  });
+}
 
 formTrigger.phoneNumber.addEventListener("input", function () {
   this.value = this.value.replace(/[^\d]/g, "");
@@ -54,7 +63,8 @@ formTrigger.formData.addEventListener("submit", function (e) {
   const validationResults = validateForm(formTrigger);
 
   if (validationResults.isValid) {
-    console.log("Form submitted successfully!", validationResults.data);
+    saveDataToLocalStorage(validationResults.data);
+    appendDataToTable(validationResults.data);
 
     formTrigger.formData.reset(); // Clear the form fields
 
@@ -67,7 +77,6 @@ formTrigger.formData.addEventListener("submit", function (e) {
     console.error("Form errors:", validationResults.errors);
   }
 });
-
 
 function validateForm(form) {
   const errors = {};
@@ -168,4 +177,27 @@ function clearError(input) {
   }
 }
 
+function appendDataToTable(data) {
+  const tableBody = document.querySelector("#submittedDataTable tbody");
 
+  const row = document.createElement("tr");
+
+  row.innerHTML = `
+    <td>${data.fname}</td>
+    <td>${data.lname}</td>
+    <td>${data.company}</td>
+    <td>${data.email}</td>
+    <td>${data.phone_code} ${data.phoneNumber}</td>
+    <td>${data.message}</td>
+    <td>${data.isChecked ? "Yes" : "No"}</td>
+  `;
+
+  tableBody.appendChild(row);
+}
+
+function saveDataToLocalStorage(entry) {
+  let existingData =
+    JSON.parse(localStorage.getItem("contactSubmissions")) || [];
+  existingData.push(entry);
+  localStorage.setItem("contactSubmissions", JSON.stringify(existingData));
+}

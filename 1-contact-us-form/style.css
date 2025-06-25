@@ -231,6 +231,15 @@ label {
   position: relative;
 }
 
+
+.container {
+  max-width: 1280px;
+  width: 100%;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+}
+
 .input-element {
   position: absolute;
   top: 40px;
